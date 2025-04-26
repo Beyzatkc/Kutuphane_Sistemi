@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+
+  veritabani:    #servisin adi
+    image: mysql:8
+    container_name: ortak_veritabani
+    environment:
+      MYSQL_DATABASE: kutuphane
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin123
+      MYSQL_ROOT_PASSWORD: root123 # root şifresi de lazım MySQL’de 💁‍♀️
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  veritabani-servisi:
+    build: ./Veritabani_Servisi #Veritabani_Servisi klasöründe bir Dockerfile var. #Git onu kullan, image oluştur ve bu servisi başlat."Yani Compose, o klasördeki Dockerfile'ı kendi içinde kullanır.                                           
+    depends_on:
+      - veritabani
+    command: ["/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "veritabaniservis.jar"]
+
+
+  kullanici-servisi:
+    build: ./Kullanici_Servisi 
+    depends_on:
+     - veritabani
+    command: ["/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "kullaniciservis.jar"]
+
+  kitap-servisi:
+    build: ./Kitap_Servisi
+    depends_on: 
+     - veritabani
+    command: ["/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "kitapservis.jar"]
+
+volumes:
+  mysql_data:
