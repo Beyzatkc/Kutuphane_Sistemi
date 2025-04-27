@@ -25,6 +25,8 @@ services:
     build: ./Kullanici_Servisi 
     depends_on:
      - veritabani
+    ports:
+     - "8080:8080"  # API'nin 8080 portunu expose ediyoruz
     command: ["/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "kullaniciservis.jar"]
 
   kitap-servisi:
@@ -32,6 +34,12 @@ services:
     depends_on: 
      - veritabani
     command: ["/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "kitapservis.jar"]
+
+  odunc-servisi:
+    build: ./Odunc_Servisi
+    depends_on:
+      - veritabani
+    command: ["/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "oduncservis.jar"]
 
 volumes:
   mysql_data:
