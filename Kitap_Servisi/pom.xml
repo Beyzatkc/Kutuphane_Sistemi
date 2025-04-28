@@ -41,7 +41,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass> <!-- BURAYA kendi Main class'ını doğru yazman lazım -->
+                            <mainClass>Kitap_API</mainClass> <!-- BURAYA kendi Main class'ını doğru yazman lazım -->
                         </manifest>
                     </archive>
                     <descriptorRefs>

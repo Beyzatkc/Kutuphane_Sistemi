@@ -1,12 +1,53 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
+    @Override
+    public Kitap Kitap_arama(int ID) {
+        try (Connection conn = Kitap.veritabaniBaglantisi()) {
+            String sql = "SELECT * FROM Kitap WHERE kitap_ID = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, ID);
+            ResultSet sonuc = stmt.executeQuery();
+
+            while (sonuc.next()) {
+                int id = sonuc.getInt("kitap_ID");
+                String kitapAdi = sonuc.getString("kitap_adi");
+                String yazaradi = sonuc.getString("kitap_yazar_adi");
+                String yazarsoyadi = sonuc.getString("kitap_yazar_soyadi");
+                String baski = sonuc.getString("kitap_baskisi");
+                String yayinevi = sonuc.getString("kitap_yayinevi");
+                int adet = sonuc.getInt("kitap_adet");
+                String kategori = sonuc.getString("kitap_kategori");
+                int sayfa = sonuc.getInt("kitap_sayfa_sayisi");
+
+                System.out.println("Bulunan Kitap:"
+                        + "\nID: " + id
+                        + "\nAdi: " + kitapAdi
+                        + "\nYazar Adi: " + yazaradi
+                        + "\nYazar Soyadi: " + yazarsoyadi
+                        + "\nBaski: " + baski
+                        + "\nYayinevi: " + yayinevi
+                        + "\nadet: " + adet
+                        + "\nkategori: " + kategori
+                        + "\nsayfa: " + sayfa
+                        + "\n---------------------------"
+                );
+                Kitap kitap=new Kitap(kitapAdi,yazaradi,yazarsoyadi,baski,adet,kategori,yayinevi,sayfa,id);
+                return kitap;
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(" Hata olustu: " + e.getMessage());
+        }
+
+        return null;
+    }
 
     @Override
-    public void Kitap_arama(String ad) {
+    public ArrayList<String> Kitap_Ada_Gore_Arama(String ad) {
+        ArrayList<String>kitaplar=new ArrayList<>();
         try (Connection conn = Kitap.veritabaniBaglantisi()) {
             String sql = "SELECT * FROM Kitap WHERE kitap_adi = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -37,6 +78,19 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
                         + "\nsayfa: " + sayfa
                         + "\n---------------------------"
                 );
+                String string = String.valueOf(id);
+                String string2 = String.valueOf(adet);
+                String string3 = String.valueOf(sayfa);
+                kitaplar.add(string);
+                kitaplar.add(kitapAdi);
+                kitaplar.add(yazaradi);
+                kitaplar.add(yazarsoyadi);
+                kitaplar.add(baski);
+                kitaplar.add(yayinevi);
+                kitaplar.add(string2);
+                kitaplar.add(kategori);
+                kitaplar.add(string3);
+
                 sayac++;
             }
             if (sayac == 0) {
@@ -46,8 +100,9 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
         } catch (Exception e) {
             System.out.println(" Hata olustu: " + e.getMessage());
         }
-
+       return kitaplar;
     }
+
 
     @Override
     public Kitap Kitap_ekleme(String kitap_adi, String yazar_ad, String yazar_soyad, String baskisi, int adet, String kategori, String yayinevi, int sayfa_sayisi) {
@@ -90,7 +145,7 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
 
             ResultSet sonuc = stmt.executeQuery();
             if (sonuc.next()) {
-                String sql2 = "UPDATE Kitap SET kitap_adi = ?, kitap_yazar_adi = ?, kitap_yazar_soyadi = ?, kitap_baskisi = ?, kitap_adet = ?, kitap_kategori = ?, kitap_yayinevi = ?, kitap_sayfa_sayisi = ?";
+                String sql2 = "UPDATE Kitap SET kitap_adi = ?, kitap_yazar_adi = ?, kitap_yazar_soyadi = ?, kitap_baskisi = ?, kitap_adet = ?, kitap_kategori = ?, kitap_yayinevi = ?, kitap_sayfa_sayisi = ? WHERE kitap_ID = ?";
                 PreparedStatement stmt2 = conn.prepareStatement(sql2);
 
                 stmt2.setString(1, kitapAdi);
@@ -101,6 +156,7 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
                 stmt2.setString(6, kategori);
                 stmt2.setString(7, yayinevi);
                 stmt2.setInt(8, sayfaSayisi);
+                stmt2.setInt(9, ID);
 
                 int satirSayisii = stmt2.executeUpdate();
                 if (satirSayisii > 0) {
@@ -116,48 +172,6 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
             System.out.println("Hata oluştu: " + e.getMessage());
         }
 
-    }
-
-    @Override
-    public void Kategoriye_Gore_Siralama() {
-        try (Connection conn = Kitap.veritabaniBaglantisi()) {
-            String sql = "SELECT * FROM Kitap ORDER BY kitap_kategori"; // Kategoriye göre sırala
-            PreparedStatement stmt = conn.prepareStatement(sql);
-
-            ResultSet sonuc = stmt.executeQuery();
-
-            String currentCategory = null;
-
-            while (sonuc.next()) {
-                int id = sonuc.getInt("kitap_ID");
-                String kitapAdi = sonuc.getString("kitap_adi");
-                String yazaradi = sonuc.getString("kitap_yazar_adi");
-                String yazarsoyadi = sonuc.getString("kitap_yazar_soyadi");
-                String baski = sonuc.getString("kitap_baskisi");
-                String yayinevi = sonuc.getString("kitap_yayinevi");
-                int adet = sonuc.getInt("kitap_adet");
-                String kategori = sonuc.getString("kitap_kategori");
-                int sayfa = sonuc.getInt("kitap_sayfa_sayisi");
-
-                if (currentCategory == null || !currentCategory.equals(kategori)) {
-                    if (currentCategory != null) {
-                        System.out.println(); // Araya boşluk bırak
-                    }
-                    System.out.println("-KATEGORİ: " + kategori);
-                    currentCategory = kategori;
-                }
-
-                System.out.println("    Kitap Adı: " + kitapAdi);
-                System.out.println("    Yazar: " + yazaradi + " " + yazarsoyadi);
-                System.out.println("    Baskı: " + baski);
-                System.out.println("    Yayınevi: " + yayinevi);
-                System.out.println("    Sayfa Sayısı: " + sayfa);
-                System.out.println("    Adet: " + adet);
-                System.out.println("-------------------------------------");
-            }
-        } catch (Exception e) {
-            System.out.println("Hata oluştu: " + e.getMessage());
-        }
     }
 
     @Override
@@ -182,7 +196,8 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
     }
 
     @Override
-    public void Yazarin_Kitaplari(String yazaradi, String yazarsoyadi) {
+    public ArrayList<String> Yazarin_Kitaplari(String yazaradi, String yazarsoyadi) {
+        ArrayList<String>kitaplar=new ArrayList<>();
         try (Connection conn = Kitap.veritabaniBaglantisi()) {
             String sql = "SELECT DISTINCT kitap_adi FROM Kitap WHERE kitap_yazar_adi = ? AND kitap_yazar_soyadi = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -200,6 +215,9 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
                         + "\nYazar Soyadi: " + yazarsoyadi
                         + "\n---------------------------"
                 );
+                kitaplar.add(kitapAdi);
+                kitaplar.add(yazaradi);
+                kitaplar.add(yazarsoyadi);
                 sayac++;
             }
             if (sayac == 0) {
@@ -209,5 +227,6 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
         } catch (Exception e) {
             System.out.println("Hata oluştu: " + e.getMessage());
         }
+        return kitaplar;
     }
 }

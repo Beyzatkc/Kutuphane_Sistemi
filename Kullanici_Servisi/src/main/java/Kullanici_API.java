@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 public class Kullanici_API {
     public static void main(String[] args) throws IOException {
@@ -18,7 +20,9 @@ public class Kullanici_API {
                 String query = exchange.getRequestURI().getQuery();
                 String[] params = query.split("&");
                 String email = params[0].split("=")[1];
+                email= URLDecoder.decode(email, StandardCharsets.UTF_8);
                 String sifre = params[1].split("=")[1];
+                sifre= URLDecoder.decode(sifre, StandardCharsets.UTF_8);
 
                 Kullanici_Servisi kullaniciServisi = new Kullanici_Servisi();
                 Kullanici kullanici = kullaniciServisi.kullanici_Girisi(email, sifre);
@@ -54,10 +58,15 @@ public class Kullanici_API {
                 String requestBody = sb.toString();
                 String[] fields = requestBody.split("&");
                 String adi = fields[0].split("=")[1];
+                adi= URLDecoder.decode(adi, StandardCharsets.UTF_8);
                 String soyadi = fields[1].split("=")[1];
+                soyadi= URLDecoder.decode(soyadi, StandardCharsets.UTF_8);
                 String email = fields[2].split("=")[1];
+                email= URLDecoder.decode(email, StandardCharsets.UTF_8);
                 String sifre = fields[3].split("=")[1];
+                sifre= URLDecoder.decode(sifre, StandardCharsets.UTF_8);
                 String kullaniciTel = fields[5].split("=")[1];
+                kullaniciTel= URLDecoder.decode(kullaniciTel, StandardCharsets.UTF_8);
 
                 // Kullanıcı kaydını yap
                 Kullanici_Servisi kullaniciServisi = new Kullanici_Servisi();

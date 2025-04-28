@@ -33,6 +33,8 @@ services:
     build: ./Kitap_Servisi
     depends_on: 
      - veritabani
+    ports:
+      - "8081:8081"
     command: ["/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "kitapservis.jar"]
 
   odunc-servisi:
