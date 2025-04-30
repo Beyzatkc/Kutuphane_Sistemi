@@ -1,4 +1,4 @@
-import com.sun.net.httpserver.HttpExchange;
+
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.BufferedReader;
@@ -28,9 +28,10 @@ public class Kitap_API {
 
                 String response;
                 if (kitap != null) {
-                    response = "Kitap bulundu! Kitap: " + kitap.getKitap_adi();
+                    String str =String.valueOf(kitap.getID());
+                    response =str;
                 } else {
-                    response = "Kitap bulunmadı!";
+                    response = null;
                 }
 
                 // Yanıtı gönder

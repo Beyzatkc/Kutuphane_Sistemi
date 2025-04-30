@@ -29,9 +29,10 @@ public class Kullanici_API {
 
                 String response;
                 if (kullanici != null) {
-                    response = "Giriş başarılı! Kullanıcı: " + kullanici.getAdi();
+                    String str = String.valueOf(kullanici.getID());
+                    response =str;
                 } else {
-                    response = "E-posta veya şifre hatalı!";
+                    response =null;
                 }
 
                 // Yanıtı gönder

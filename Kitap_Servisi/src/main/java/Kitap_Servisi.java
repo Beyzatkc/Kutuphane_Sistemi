@@ -10,7 +10,7 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
             stmt.setInt(1, ID);
             ResultSet sonuc = stmt.executeQuery();
 
-            while (sonuc.next()) {
+            if (sonuc.next()) {
                 int id = sonuc.getInt("kitap_ID");
                 String kitapAdi = sonuc.getString("kitap_adi");
                 String yazaradi = sonuc.getString("kitap_yazar_adi");
@@ -34,8 +34,21 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
                         + "\n---------------------------"
                 );
                 Kitap kitap=new Kitap(kitapAdi,yazaradi,yazarsoyadi,baski,adet,kategori,yayinevi,sayfa,id);
+                if(kitap.getAdet()!=0){
+                    int k_adet= kitap.getAdet()-1;
+                    String sql2 = "UPDATE Kitap SET kitap_adet = ? WHERE kitap_ID = ?";
+                    PreparedStatement stmt2 = conn.prepareStatement(sql);
+                    stmt2.setInt(1, k_adet);
+                    stmt.setInt(2, ID);
                 return kitap;
+                }else if(kitap.getAdet()==0){
+                    System.out.println("belirtilen iddeki kitap suanda mevcut degil isterseniz bir sure sonra tekrar kontrol edin");
+                    return null;
+                }
 
+            }else{
+                System.out.println("belirtilen id ile ilgili kitap bulunamadi");
+                return null;
             }
 
         } catch (Exception e) {

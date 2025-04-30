@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class Odunc {
@@ -53,5 +56,11 @@ public class Odunc {
 
     public void setIadeEdildiMi(boolean iadeEdildiMi) {
         this.iadeEdildiMi = iadeEdildiMi;
+    }
+    public static Connection veritabaniBaglantisi() throws SQLException {
+        String url = "jdbc:mysql://veritabani:3306/kutuphane?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        String kullaniciAdi = "admin";
+        String parola = "admin123";
+        return DriverManager.getConnection(url,kullaniciAdi,parola);
     }
 }
