@@ -32,7 +32,7 @@ public class Kullanici_API {
                     String str = String.valueOf(kullanici.getID());
                     response =str;
                 } else {
-                    response =null;
+                    response ="";
                 }
 
                 // Yanıtı gönder

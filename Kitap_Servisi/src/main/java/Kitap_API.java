@@ -31,7 +31,7 @@ public class Kitap_API {
                     String str =String.valueOf(kitap.getID());
                     response =str;
                 } else {
-                    response = null;
+                    response ="";
                 }
 
                 // Yanıtı gönder
@@ -229,6 +229,34 @@ public class Kitap_API {
                 }
 
                 String response = stringbirlestirici.toString();
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }
+        }));
+
+        server.createContext("/KitapAdetArttirma", (exchange -> {
+            if ("GET".equals(exchange.getRequestMethod())) {
+                // URL'den parametreleri al
+                String query = exchange.getRequestURI().getQuery();
+                String[] params = query.split("&");
+                String ID = params[0].split("=")[1];
+                ID= URLDecoder.decode(ID, StandardCharsets.UTF_8);
+                int IDI = Integer.parseInt(ID);
+
+                Kitap_Servisi kitapServis = new Kitap_Servisi();
+                Kitap kitap = kitapServis.KitapAdetArttirma(IDI);
+
+                String response;
+                if (kitap != null) {
+                    String str =String.valueOf(kitap.getAdet());
+                    response =str;
+                } else {
+                    response ="";
+                }
+
+                // Yanıtı gönder
                 exchange.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());

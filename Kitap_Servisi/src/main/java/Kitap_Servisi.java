@@ -37,10 +37,11 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
                 if(kitap.getAdet()!=0){
                     int k_adet= kitap.getAdet()-1;
                     String sql2 = "UPDATE Kitap SET kitap_adet = ? WHERE kitap_ID = ?";
-                    PreparedStatement stmt2 = conn.prepareStatement(sql);
+                    PreparedStatement stmt2 = conn.prepareStatement(sql2);
                     stmt2.setInt(1, k_adet);
-                    stmt.setInt(2, ID);
-                return kitap;
+                    stmt2.setInt(2, ID);
+                    stmt2.executeUpdate();
+                    return kitap;
                 }else if(kitap.getAdet()==0){
                     System.out.println("belirtilen iddeki kitap suanda mevcut degil isterseniz bir sure sonra tekrar kontrol edin");
                     return null;
@@ -242,4 +243,50 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
         }
         return kitaplar;
     }
+
+    @Override
+    public Kitap KitapAdetArttirma(int ID) {
+        try (Connection conn = Kitap.veritabaniBaglantisi()) {
+            String sql = "SELECT * FROM Kitap WHERE kitap_ID = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, ID);
+            ResultSet sonuc = stmt.executeQuery();
+
+            if (sonuc.next()) {
+                int id = sonuc.getInt("kitap_ID");
+                String kitapAdi = sonuc.getString("kitap_adi");
+                String yazaradi = sonuc.getString("kitap_yazar_adi");
+                String yazarsoyadi = sonuc.getString("kitap_yazar_soyadi");
+                String baski = sonuc.getString("kitap_baskisi");
+                String yayinevi = sonuc.getString("kitap_yayinevi");
+                int adet = sonuc.getInt("kitap_adet");
+                String kategori = sonuc.getString("kitap_kategori");
+                int sayfa = sonuc.getInt("kitap_sayfa_sayisi");
+
+                Kitap kitap = new Kitap(kitapAdi, yazaradi, yazarsoyadi, baski, adet, kategori, yayinevi, sayfa, id);
+
+                // Adedi 1 artır
+                int yeniAdet = kitap.getAdet() + 1;
+                String sql2 = "UPDATE Kitap SET kitap_adet = ? WHERE kitap_ID = ?";
+                PreparedStatement stmt2 = conn.prepareStatement(sql2); // Doğru SQL kullanılıyor
+                stmt2.setInt(1, yeniAdet);
+                stmt2.setInt(2, ID);
+
+                stmt2.executeUpdate(); // Sorgu çalıştırılıyor
+
+                // Kitap nesnesini güncel adetle geri döndür
+                kitap.setAdet(yeniAdet);
+                return kitap;
+            } else {
+                System.out.println("Belirtilen ID ile kitap bulunamadı");
+                return null;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Hata oluştu: " + e.getMessage());
+        }
+
+        return null;
+    }
+
 }

@@ -7,4 +7,6 @@ public interface Kitap_Servisi_arayuzu {
     public void Kitap_Silme(int ID);
     public ArrayList<String> Yazarin_Kitaplari(String yazaradi, String yazarsoyadi);
     public ArrayList<String> Kitap_Ada_Gore_Arama(String ad);
+    public Kitap KitapAdetArttirma(int ID);
+
 }
