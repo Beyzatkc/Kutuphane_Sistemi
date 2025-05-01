@@ -48,7 +48,7 @@ public class Odunc_API {
                 try {
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
-                            .uri(URI.create("http://localhost:8080/giris?email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) +
+                            .uri(URI.create("http://kullanici-servisi:8080/giris?email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) +
                                     "&sifre=" + URLEncoder.encode(sifre, StandardCharsets.UTF_8)))
                             .GET()
                             .build();
@@ -57,7 +57,7 @@ public class Odunc_API {
                   //  kitap servisine get istegi
                     HttpClient client2 = HttpClient.newHttpClient();
                     HttpRequest request2 = HttpRequest.newBuilder()
-                            .uri(URI.create("http://localhost:8081/KitapArama?kitapid="+kitapidsi))
+                            .uri(URI.create("http://kitap-servisi:8081/KitapArama?kitapid="+kitapidsi))
                             .GET()
                             .build();
                     HttpResponse<String> response2 = client2.send(request2, HttpResponse.BodyHandlers.ofString());
@@ -114,7 +114,7 @@ public class Odunc_API {
                 try {
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
-                            .uri(URI.create("http://localhost:8080/giris?email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) +
+                            .uri(URI.create("http://kullanici-servisi:8080/giris?email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) +
                                     "&sifre=" + URLEncoder.encode(sifre, StandardCharsets.UTF_8)))
                             .GET()
                             .build();
@@ -123,7 +123,7 @@ public class Odunc_API {
                     //  kitap servisine get istegi
                     HttpClient client2 = HttpClient.newHttpClient();
                     HttpRequest request2 = HttpRequest.newBuilder()
-                            .uri(URI.create("http://localhost:8081/KitapArama?kitapid="+kitapidsi))
+                            .uri(URI.create("http://kitap-servisi:8081/KitapArama?kitapid="+kitapidsi))
                             .GET()
                             .build();
                     HttpResponse<String> response2 = client2.send(request2, HttpResponse.BodyHandlers.ofString());
@@ -131,7 +131,7 @@ public class Odunc_API {
                     if(!gelenCevap.isEmpty()&&!gelenCevap2.isEmpty()){
                         HttpClient client3 = HttpClient.newHttpClient();
                         HttpRequest request3= HttpRequest.newBuilder()
-                                .uri(URI.create("http://localhost:8081/KitapAdetArttirma?kitapid="+kitapidsi))
+                                .uri(URI.create("http://kitap-servisi:8081/KitapAdetArttirma?kitapid="+kitapidsi))
                                 .GET()
                                 .build();
                         HttpResponse<String> response3 = client3.send(request3, HttpResponse.BodyHandlers.ofString());
