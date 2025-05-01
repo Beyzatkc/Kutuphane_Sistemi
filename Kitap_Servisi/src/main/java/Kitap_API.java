@@ -264,6 +264,34 @@ public class Kitap_API {
             }
         }));
 
+        server.createContext("/KitapAdetAzaltma", (exchange -> {
+            if ("GET".equals(exchange.getRequestMethod())) {
+                // URL'den parametreleri al
+                String query = exchange.getRequestURI().getQuery();
+                String[] params = query.split("&");
+                String ID = params[0].split("=")[1];
+                ID= URLDecoder.decode(ID, StandardCharsets.UTF_8);
+                int IDI = Integer.parseInt(ID);
+
+                Kitap_Servisi kitapServis = new Kitap_Servisi();
+                Kitap kitap = kitapServis.KitapAdetAzaltma(IDI);
+
+                String response;
+                if (kitap != null) {
+                    String str =String.valueOf(kitap.getAdet());
+                    response =str;
+                } else {
+                    response ="";
+                }
+
+                // Yanıtı gönder
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }
+        }));
+
         // Sunucuyu başlat
         server.start();
         System.out.println("Kullanici API server'ı http://localhost:8081 adresinde çalışıyor...");

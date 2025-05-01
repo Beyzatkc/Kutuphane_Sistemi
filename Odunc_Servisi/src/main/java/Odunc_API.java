@@ -57,21 +57,20 @@ public class Odunc_API {
                   //  kitap servisine get istegi
                     HttpClient client2 = HttpClient.newHttpClient();
                     HttpRequest request2 = HttpRequest.newBuilder()
-                            .uri(URI.create("http://kitap-servisi:8081/KitapArama?kitapid="+kitapidsi))
+                            .uri(URI.create("http://kitap-servisi:8081/KitapAdetAzaltma?kitapid="+kitapidsi))
                             .GET()
                             .build();
                     HttpResponse<String> response2 = client2.send(request2, HttpResponse.BodyHandlers.ofString());
                     String gelenCevap2=response2.body();
                     if(!gelenCevap.isEmpty()&&!gelenCevap2.isEmpty()){
                             int kullaniciID = Integer.parseInt(gelenCevap.trim());
-                           int kitapidsii=Integer.parseInt(gelenCevap2.trim());
                         Odunc_Servisi oduncservisi=new Odunc_Servisi();
-                        oduncservisi.Odunc_Alma(kullaniciID,kitapidsii,null,null,iademi);
+                        oduncservisi.Odunc_Alma(kullaniciID,kitapidsi,null,null,iademi);
                         yanit = "Ödünç alma işlemi başarıyla gerçekleştirildi.";
                     }else if(gelenCevap.isEmpty()){
                         yanit="Kullanıcı girişi başarısız";
                     }else if(gelenCevap2.isEmpty()){
-                        yanit="belirtilen id de kitap bulunamadi";
+                        yanit="Ödün alma işlemi başarısız";
                     }
 
                 }catch (Exception e){
@@ -111,6 +110,7 @@ public class Odunc_API {
                 String sifre = fields[2].split("=")[1];
                 sifre = URLDecoder.decode(sifre, StandardCharsets.UTF_8);
                 // kullanici servisine get istegi
+                // kullanici servisine get istegi
                 try {
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
@@ -123,32 +123,25 @@ public class Odunc_API {
                     //  kitap servisine get istegi
                     HttpClient client2 = HttpClient.newHttpClient();
                     HttpRequest request2 = HttpRequest.newBuilder()
-                            .uri(URI.create("http://kitap-servisi:8081/KitapArama?kitapid="+kitapidsi))
+                            .uri(URI.create("http://kitap-servisi:8081/KitapAdetArttirma?kitapid="+kitapidsi))
                             .GET()
                             .build();
                     HttpResponse<String> response2 = client2.send(request2, HttpResponse.BodyHandlers.ofString());
                     String gelenCevap2=response2.body();
                     if(!gelenCevap.isEmpty()&&!gelenCevap2.isEmpty()){
-                        HttpClient client3 = HttpClient.newHttpClient();
-                        HttpRequest request3= HttpRequest.newBuilder()
-                                .uri(URI.create("http://kitap-servisi:8081/KitapAdetArttirma?kitapid="+kitapidsi))
-                                .GET()
-                                .build();
-                        HttpResponse<String> response3 = client3.send(request3, HttpResponse.BodyHandlers.ofString());
-                        String gelenCevapadet=response3.body();
-                        if(!gelenCevapadet.isEmpty()){
-                            int kullaniciID = Integer.parseInt(gelenCevap.trim());
-                          Odunc_Servisi oduncservis=new Odunc_Servisi();
-                          oduncservis.iade_Etme(kitapidsi,kullaniciID);
-                          yanit="iade başarıyla gerçekleşti.";
-                        }else{
-                          yanit="iade gerceklestirilemedi ödünc kaydı bulunamadı";
-                        }
+                        int kullaniciID = Integer.parseInt(gelenCevap.trim());
+                        Odunc_Servisi oduncservisi=new Odunc_Servisi();
+                        oduncservisi.iade_Etme(kitapidsi,kullaniciID);
+                        yanit = "iade etme işlemi başarıyla gerçekleştirildi.";
+                    }else if(gelenCevap.isEmpty()){
+                        yanit="Kullanıcı girişi başarısız";
+                    }else if(gelenCevap2.isEmpty()){
+                        yanit="iade işlemi basarisiz";
                     }
 
                 }catch (Exception e){
                     e.printStackTrace();
-                    yanit = "İstek gönderilirken hata oluştu."+ e.getMessage();
+                    String hata = "İstek gönderilirken hata oluştu."+ e.getMessage();
                 }
                 // Gerekirse cevabı kullanıcıya döndür
                 exchange.sendResponseHeaders(200, yanit.getBytes().length);
