@@ -12,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class Odunc_API {
     public static void main(String[] args) throws IOException {
@@ -75,7 +76,7 @@ public class Odunc_API {
 
                 }catch (Exception e){
                     e.printStackTrace();
-                    String hata = "İstek gönderilirken hata oluştu."+ e.getMessage();
+                     yanit = "İstek gönderilirken hata oluştu."+ e.getMessage();
                 }
                 // Gerekirse cevabı kullanıcıya döndür
                 exchange.sendResponseHeaders(200, yanit.getBytes().length);
@@ -110,7 +111,6 @@ public class Odunc_API {
                 String sifre = fields[2].split("=")[1];
                 sifre = URLDecoder.decode(sifre, StandardCharsets.UTF_8);
                 // kullanici servisine get istegi
-                // kullanici servisine get istegi
                 try {
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
@@ -141,7 +141,7 @@ public class Odunc_API {
 
                 }catch (Exception e){
                     e.printStackTrace();
-                    String hata = "İstek gönderilirken hata oluştu."+ e.getMessage();
+                     yanit = "İstek gönderilirken hata oluştu."+ e.getMessage();
                 }
                 // Gerekirse cevabı kullanıcıya döndür
                 exchange.sendResponseHeaders(200, yanit.getBytes().length);
@@ -151,6 +151,32 @@ public class Odunc_API {
 
             }
         }));
+
+        server.createContext("/OduncKayitlari", (exchange -> {
+            String response="";
+            if ("GET".equals(exchange.getRequestMethod())) {
+                Odunc_Servisi oduncservis = new Odunc_Servisi();
+                ArrayList<Integer> oduncKayitlari = oduncservis.Odunc_Kayitlari();
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < oduncKayitlari.size(); i += 2) {
+                    builder.append(oduncKayitlari.get(i))
+                            .append(",")
+                            .append(oduncKayitlari.get(i + 1));
+
+                    // Son çifte kadar virgül koy
+                    if (i + 2 < oduncKayitlari.size()) {
+                        builder.append(",");
+                    }
+                }
+                 response = builder.toString();
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }
+        }));
+
+
 
         server.start();
         System.out.println("Kullanici API server'ı http://localhost:8082 adresinde çalışıyor...");

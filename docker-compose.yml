@@ -45,5 +45,13 @@ services:
       - "8082:8082"
     command: ["/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "oduncservis.jar"]
 
+  bildirim-servisi:
+    build: ./Bildirim_Servisi
+    depends_on:
+      - veritabani
+    ports:
+      - "8083:8083"
+    command: [ "/wait-for-it.sh", "veritabani:3306", "--", "java", "-jar", "bildirimservis.jar" ]
+
 volumes:
   mysql_data:

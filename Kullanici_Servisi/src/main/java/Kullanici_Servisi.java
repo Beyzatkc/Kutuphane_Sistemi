@@ -59,4 +59,30 @@ public class Kullanici_Servisi implements Kullanici_Servisi_Arayuzu{
             System.out.println("Hata olustu: " + e.getMessage());
         }
     }
+    @Override
+    public Kullanici Telefon_Mail_Gosterme(int ID) {
+        try (Connection conn =Kullanici.veritabaniBaglantisi()) {
+            String sql = "SELECT * FROM Kullanici WHERE kullanici_ID = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, ID);
+
+            ResultSet sonuc = stmt.executeQuery();
+            if (sonuc.next()) {
+                String ad=sonuc.getString("kullanici_adi");
+                String soyad=sonuc.getString("kullanici_soyadi");
+                String sifre=sonuc.getString("kullanici_sifre");
+                String Email=sonuc.getString("kullanici_email");
+                String Kayit=sonuc.getString("kayit_tarihi");
+                String tel=sonuc.getString("kullanici_tel");
+                Kullanici kullanici=new Kullanici(ad,soyad,sifre,Email,Kayit,tel,ID);
+                return kullanici;
+            } else {
+                System.out.println("Bu ID de kullanıcı bulunamadı");
+            }
+
+        } catch (Exception e) {
+            System.out.println(" Hata olustu: " + e.getMessage());
+        }
+        return null;
+    }
 }

@@ -81,6 +81,32 @@ public class Kullanici_API {
             }
         }));
 
+        server.createContext("/TelefonMailGosterme", (exchange -> {
+            if ("GET".equals(exchange.getRequestMethod())) {
+                String query = exchange.getRequestURI().getQuery();
+                String[] params = query.split("&");
+                String id = params[0].split("=")[1];
+                id= URLDecoder.decode(id, StandardCharsets.UTF_8);
+                int idsi = Integer.parseInt(id);
+
+
+                Kullanici_Servisi kullaniciServisi = new Kullanici_Servisi();
+                Kullanici kullanici = kullaniciServisi.Telefon_Mail_Gosterme(idsi);
+                String response;
+                if (kullanici != null) {
+                    response =kullanici.getEmail()+","+kullanici.getTeli();
+                } else {
+                    response ="";
+                }
+
+                // Yanıtı gönder
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }
+        }));
+
         // Sunucuyu başlat
         server.start();
         System.out.println("Kullanici API server'ı http://localhost:8080 adresinde çalışıyor...");
