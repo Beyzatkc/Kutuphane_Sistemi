@@ -36,15 +36,14 @@ public class Kullanici_Servisi implements Kullanici_Servisi_Arayuzu{
     @Override
     public void kullanici_Kaydi(String adi, String soyadi, String Email, String sifre, String kayit_tarihi,String kullanici_tel) {
         try (Connection conn =Kullanici.veritabaniBaglantisi()) {
-            String sql = "INSERT INTO Kullanici (kullanici_adi, kullanici_soyadi, kullanici_email, kullanici_sifre ,kayit_tarihi,kullanici_tel) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Kullanici (kullanici_adi, kullanici_soyadi, kullanici_email, kullanici_sifre ,kullanici_tel) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, adi);
             stmt.setString(2, soyadi);
             stmt.setString(3, Email);
             stmt.setString(4, sifre);
-            stmt.setString(5,kayit_tarihi);
-            stmt.setString(6,kullanici_tel);
+            stmt.setString(5,kullanici_tel);
 
             int satirSayisi = stmt.executeUpdate();
             if (satirSayisi > 0) {

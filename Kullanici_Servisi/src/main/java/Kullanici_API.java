@@ -66,7 +66,7 @@ public class Kullanici_API {
                 email= URLDecoder.decode(email, StandardCharsets.UTF_8);
                 String sifre = fields[3].split("=")[1];
                 sifre= URLDecoder.decode(sifre, StandardCharsets.UTF_8);
-                String kullaniciTel = fields[5].split("=")[1];
+                String kullaniciTel = fields[4].split("=")[1];
                 kullaniciTel= URLDecoder.decode(kullaniciTel, StandardCharsets.UTF_8);
 
                 // Kullanıcı kaydını yap
