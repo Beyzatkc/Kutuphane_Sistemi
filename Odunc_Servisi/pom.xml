@@ -41,7 +41,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Odunc_API</mainClass> <!-- Burayı kendi main class'ına göre güncelle -->
+                            <mainClass>Odunc_API</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

@@ -239,12 +239,11 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
                 if(kitap!=null){
                     int yeniAdet = kitap.getAdet() + 1;
                     String sql2 = "UPDATE Kitap SET kitap_adet = ? WHERE kitap_ID = ?";
-                    PreparedStatement stmt2 = conn.prepareStatement(sql2); // Doğru SQL kullanılıyor
+                    PreparedStatement stmt2 = conn.prepareStatement(sql2);
                     stmt2.setInt(1, yeniAdet);
                     stmt2.setInt(2, ID);
 
-                    stmt2.executeUpdate(); // Sorgu çalıştırılıyor
-                    // Kitap nesnesini güncel adetle geri döndür
+                    stmt2.executeUpdate();
                     kitap.setAdet(yeniAdet);
                     return kitap;
                 }else if(kitap==null){
@@ -269,8 +268,7 @@ public class Kitap_Servisi implements Kitap_Servisi_arayuzu {
                 stmt2.setInt(1, yeniAdet);
                 stmt2.setInt(2, ID);
 
-                stmt2.executeUpdate(); // Sorgu çalıştırılıyor
-                // Kitap nesnesini güncel adetle geri döndür
+                stmt2.executeUpdate();
                 kitap.setAdet(yeniAdet);
                 return kitap;
             }else if(kitap==null){

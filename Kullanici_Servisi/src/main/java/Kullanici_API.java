@@ -10,13 +10,10 @@ import java.nio.charset.StandardCharsets;
 
 public class Kullanici_API {
     public static void main(String[] args) throws IOException {
-        // HTTP server'ı başlatıyoruz.
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
-        // Kullanıcı giriş işlemi için GET endpoint'i
         server.createContext("/giris", (exchange -> {
             if ("GET".equals(exchange.getRequestMethod())) {
-                // URL'den parametreleri al
                 String query = exchange.getRequestURI().getQuery();
                 String[] params = query.split("&");
                 String email = params[0].split("=")[1];
@@ -35,7 +32,6 @@ public class Kullanici_API {
                     response ="";
                 }
 
-                // Yanıtı gönder
                 exchange.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
@@ -43,7 +39,6 @@ public class Kullanici_API {
             }
         }));
 
-        // Kullanıcı kaydı işlemi için POST endpoint'i
         server.createContext("/kayit", (exchange -> {
             if ("POST".equals(exchange.getRequestMethod())) {
                 // POST verisini al
@@ -55,7 +50,6 @@ public class Kullanici_API {
                     sb.append(line);
                 }
 
-                // JSON formatındaki veriyi ayıkla
                 String requestBody = sb.toString();
                 String[] fields = requestBody.split("&");
                 String adi = fields[0].split("=")[1];
@@ -69,7 +63,6 @@ public class Kullanici_API {
                 String kullaniciTel = fields[4].split("=")[1];
                 kullaniciTel= URLDecoder.decode(kullaniciTel, StandardCharsets.UTF_8);
 
-                // Kullanıcı kaydını yap
                 Kullanici_Servisi kullaniciServisi = new Kullanici_Servisi();
                 kullaniciServisi.kullanici_Kaydi(adi, soyadi, email, sifre, null, kullaniciTel);
 
@@ -99,7 +92,6 @@ public class Kullanici_API {
                     response ="";
                 }
 
-                // Yanıtı gönder
                 exchange.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
@@ -107,7 +99,6 @@ public class Kullanici_API {
             }
         }));
 
-        // Sunucuyu başlat
         server.start();
         System.out.println("Kullanici API server'ı http://localhost:8080 adresinde çalışıyor...");
     }

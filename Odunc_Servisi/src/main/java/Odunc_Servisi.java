@@ -33,7 +33,6 @@ public class Odunc_Servisi implements Odunc_Servisi_Arayuzu{
     @Override
     public void iade_Etme(int kitapID, int kullaniciID) {
         try (Connection conn = Odunc.veritabaniBaglantisi()) {
-            // Önce: Kayıt gerçekten var mı ve iade edilmemiş mi?
             String kontrolSql = "SELECT * FROM Odunc WHERE kitap_IDSI = ? AND kullanici_IDSI = ? AND iade_edildi_mi = false";
             PreparedStatement kontrolStmt = conn.prepareStatement(kontrolSql);
             kontrolStmt.setInt(1, kitapID);
@@ -41,7 +40,6 @@ public class Odunc_Servisi implements Odunc_Servisi_Arayuzu{
             ResultSet sonuc = kontrolStmt.executeQuery();
 
             if (sonuc.next()) {
-                // Güncelle: iade_edildi_mi = true yap
                 String guncelleSql = "UPDATE Odunc SET iade_edildi_mi = true WHERE kitap_IDSI = ? AND kullanici_IDSI = ?";
                 PreparedStatement guncelleStmt = conn.prepareStatement(guncelleSql);
                 guncelleStmt.setInt(1, kitapID);
@@ -78,9 +76,7 @@ public class Odunc_Servisi implements Odunc_Servisi_Arayuzu{
                 Timestamp iade_tarihi = rs.getTimestamp("iade_tarihi");
                 boolean iade_edildi_mi = rs.getBoolean("iade_edildi_mi");
                 if (iade_tarihi != null) {
-                    // Bugün ve iade tarihi arasındaki farkı hesapla
                     long gunFarki = ChronoUnit.DAYS.between(LocalDateTime.now(), iade_tarihi.toLocalDateTime());
-                    // Eğer 5 gün veya daha az kaldıysa
                     if (gunFarki <= 5 && gunFarki >= 0 && !iade_edildi_mi) {
                         kullaniciIDvekitapID.add(kullanici_Id);
                         kullaniciIDvekitapID.add(kitapId);

@@ -16,7 +16,6 @@ public class Kitap_API {
 
         server.createContext("/KitapArama", (exchange -> {
             if ("GET".equals(exchange.getRequestMethod())) {
-                // URL'den parametreleri al
                 String query = exchange.getRequestURI().getQuery();
                 String[] params = query.split("&");
                 String ID = params[0].split("=")[1];
@@ -46,7 +45,6 @@ public class Kitap_API {
 
         server.createContext("/KitapEkleme", (exchange -> {
             if ("POST".equals(exchange.getRequestMethod())) {
-                // POST verisini al
                 InputStreamReader isr = new InputStreamReader(exchange.getRequestBody());
                 BufferedReader br = new BufferedReader(isr);
                 StringBuilder sb = new StringBuilder();
@@ -55,7 +53,6 @@ public class Kitap_API {
                     sb.append(line);
                 }
 
-                // JSON formatındaki veriyi ayıkla
                 String requestBody = sb.toString();
                 String[] fields = requestBody.split("&");
                 String kitapadi = fields[0].split("=")[1];
@@ -78,7 +75,6 @@ public class Kitap_API {
                 int sayfasi = Integer.parseInt(sayfa);
 
 
-                // Kullanıcı kaydını yap
                 Kitap_Servisi kitapServisi = new Kitap_Servisi();
                 kitapServisi.Kitap_ekleme(kitapadi,yazaradi,yazarsoyadi,baskisi,adeti,kategori,yayinevi,sayfasi);
 
@@ -102,7 +98,6 @@ public class Kitap_API {
                     sb.append(line);
                 }
 
-                // JSON formatındaki veriyi ayıkla
                 String requestBody = sb.toString();
                 String[] fields = requestBody.split("&");
                 String ID = fields[0].split("=")[1];
@@ -128,7 +123,7 @@ public class Kitap_API {
                 int sayfasi = Integer.parseInt(sayfa);
 
 
-                // Kullanıcı kaydını yap
+
                 Kitap_Servisi kitapServisi = new Kitap_Servisi();
                 kitapServisi.Guncelleme(IDSII,kitapadi,yazaradi,yazarsoyadi,baskisi,adeti,kategori,yayinevi,sayfasi);
 
@@ -143,7 +138,6 @@ public class Kitap_API {
 
         server.createContext("/KitapSilme", (exchange -> {
             if ("POST".equals(exchange.getRequestMethod())) {
-                // POST verisini al
                 InputStreamReader isr = new InputStreamReader(exchange.getRequestBody());
                 BufferedReader br = new BufferedReader(isr);
                 StringBuilder sb = new StringBuilder();
@@ -152,7 +146,6 @@ public class Kitap_API {
                     sb.append(line);
                 }
 
-                // JSON formatındaki veriyi ayıkla
                 String requestBody = sb.toString();
                 String[] fields = requestBody.split("&");
                 String ID = fields[0].split("=")[1];
@@ -172,7 +165,6 @@ public class Kitap_API {
 
         server.createContext("/YazarinKitaplari", (exchange -> {
             if ("GET".equals(exchange.getRequestMethod())) {
-                // URL'den parametreleri al
                 String query = exchange.getRequestURI().getQuery();
                 String[] params = query.split("&");
                 String yazaradi = params[0].split("=")[1];
@@ -203,7 +195,6 @@ public class Kitap_API {
 
         server.createContext("/KitapAdaGoreArama", (exchange -> {
             if ("GET".equals(exchange.getRequestMethod())) {
-                // URL'den parametreleri al
                 String query = exchange.getRequestURI().getQuery();
                 String[] params = query.split("&");
                 String kitapadi = params[0].split("=")[1];
@@ -238,7 +229,6 @@ public class Kitap_API {
 
         server.createContext("/KitapAdetArttirma", (exchange -> {
             if ("GET".equals(exchange.getRequestMethod())) {
-                // URL'den parametreleri al
                 String query = exchange.getRequestURI().getQuery();
                 String[] params = query.split("&");
                 String ID = params[0].split("=")[1];
@@ -256,7 +246,6 @@ public class Kitap_API {
                     response ="";
                 }
 
-                // Yanıtı gönder
                 exchange.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
@@ -266,7 +255,6 @@ public class Kitap_API {
 
         server.createContext("/KitapAdetAzaltma", (exchange -> {
             if ("GET".equals(exchange.getRequestMethod())) {
-                // URL'den parametreleri al
                 String query = exchange.getRequestURI().getQuery();
                 String[] params = query.split("&");
                 String ID = params[0].split("=")[1];
@@ -284,7 +272,6 @@ public class Kitap_API {
                     response ="";
                 }
 
-                // Yanıtı gönder
                 exchange.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
@@ -292,7 +279,6 @@ public class Kitap_API {
             }
         }));
 
-        // Sunucuyu başlat
         server.start();
         System.out.println("Kullanici API server'ı http://localhost:8081 adresinde çalışıyor...");
     }

@@ -7,12 +7,10 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 
 public class Bildirim_API {
     public static void main(String[] args) throws IOException {
@@ -26,7 +24,6 @@ public class Bildirim_API {
                 while ((line = br.readLine()) != null) {
                     sb.append(line);
                 }
-                // JSON formatındaki veriyi ayıkla
                 String requestBody = sb.toString();
                 String[] fields = requestBody.split("&");
 

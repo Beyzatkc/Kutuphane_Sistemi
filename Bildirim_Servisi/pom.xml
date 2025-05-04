@@ -41,7 +41,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Bildirim_API</mainClass> <!-- Bildirim servisine ait ana sınıf -->
+                            <mainClass>Bildirim_API</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

@@ -20,7 +20,6 @@ public class Odunc_API {
 
         server.createContext("/OduncAlma", (exchange -> {
             if ("POST".equals(exchange.getRequestMethod())) {
-                // POST verisini al
                 InputStreamReader isr = new InputStreamReader(exchange.getRequestBody());
                 BufferedReader br = new BufferedReader(isr);
                 StringBuilder sb = new StringBuilder();
@@ -29,7 +28,6 @@ public class Odunc_API {
                     sb.append(line);
                 }
 
-                // JSON formatındaki veriyi ayıkla
                 String yanit="";
                 String requestBody = sb.toString();
                 String[] fields = requestBody.split("&");
@@ -45,7 +43,6 @@ public class Odunc_API {
                 String sifre = fields[3].split("=")[1];
                 sifre = URLDecoder.decode(sifre, StandardCharsets.UTF_8);
 
-             // kullanici servisine get istegi
                 try {
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
@@ -78,7 +75,6 @@ public class Odunc_API {
                     e.printStackTrace();
                      yanit = "İstek gönderilirken hata oluştu."+ e.getMessage();
                 }
-                // Gerekirse cevabı kullanıcıya döndür
                 exchange.sendResponseHeaders(200, yanit.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(yanit.getBytes());
@@ -91,7 +87,6 @@ public class Odunc_API {
 
         server.createContext("/iadeEtme", (exchange -> {
             if ("POST".equals(exchange.getRequestMethod())) {
-                // POST verisini al
                 InputStreamReader isr = new InputStreamReader(exchange.getRequestBody());
                 BufferedReader br = new BufferedReader(isr);
                 StringBuilder sb = new StringBuilder();
@@ -110,7 +105,6 @@ public class Odunc_API {
                 email = URLDecoder.decode(email, StandardCharsets.UTF_8);
                 String sifre = fields[2].split("=")[1];
                 sifre = URLDecoder.decode(sifre, StandardCharsets.UTF_8);
-                // kullanici servisine get istegi
                 try {
                     HttpClient client = HttpClient.newHttpClient();
                     HttpRequest request = HttpRequest.newBuilder()
@@ -120,7 +114,6 @@ public class Odunc_API {
                             .build();
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                     String gelenCevap=response.body();
-                    //  kitap servisine get istegi
                     HttpClient client2 = HttpClient.newHttpClient();
                     HttpRequest request2 = HttpRequest.newBuilder()
                             .uri(URI.create("http://kitap-servisi:8081/KitapAdetArttirma?kitapid="+kitapidsi))
@@ -143,7 +136,6 @@ public class Odunc_API {
                     e.printStackTrace();
                      yanit = "İstek gönderilirken hata oluştu."+ e.getMessage();
                 }
-                // Gerekirse cevabı kullanıcıya döndür
                 exchange.sendResponseHeaders(200, yanit.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(yanit.getBytes());
@@ -163,7 +155,6 @@ public class Odunc_API {
                             .append(",")
                             .append(oduncKayitlari.get(i + 1));
 
-                    // Son çifte kadar virgül koy
                     if (i + 2 < oduncKayitlari.size()) {
                         builder.append(",");
                     }
